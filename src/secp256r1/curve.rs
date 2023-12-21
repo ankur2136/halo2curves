@@ -91,6 +91,41 @@ impl Secp256r1 {
     ]);
 }
 
+pub use elliptic_curve::{bigint::U256, consts::U32};
+use elliptic_curve::bigint::ArrayEncoding;
+use elliptic_curve::{FieldBytesEncoding};
+
+pub type FieldBytes = elliptic_curve::FieldBytes<Secp256r1>;
+const ORDER_HEX: &str = "ffffffff00000001000000000000000000000000ffffffffffffffffffffffff";
+/// Modulus of Solar Eclipse's base field serialized as hexadecimal.
+const MODULUS_HEX: &str = "ffffffff000000010000000000000000aaa0c132719468089442c088a05f455d";
+
+impl Secp256r1 {
+    /// Modulus of Solar Eclipse's base field.
+    pub const MODULUS: U256 = U256::from_be_hex(MODULUS_HEX);
+}
+
+impl elliptic_curve::Curve for Secp256r1 {
+    /// 32-byte serialized field elements.
+    type FieldBytesSize = U32;
+
+    /// 256-bit integer type used for internally representing field elements.
+    type Uint = U256;
+
+    /// Order of Solar Eclipse's elliptic curve group (i.e. scalar modulus).
+    const ORDER: U256 = U256::from_be_hex(ORDER_HEX);
+}
+
+impl FieldBytesEncoding<Secp256r1> for U256 {
+    fn decode_field_bytes(field_bytes: &FieldBytes) -> Self {
+        U256::from_be_byte_array(*field_bytes)
+    }
+
+    fn encode_field_bytes(&self) -> FieldBytes {
+        self.to_be_byte_array()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

@@ -22,6 +22,8 @@ pub use ff;
 pub use group;
 pub use pairing;
 pub use pasta_curves::arithmetic::{Coordinates, CurveAffine, CurveExt};
+pub use elliptic_curve::{self, bigint::U256, consts::U32};
+pub type EncodedPoint = elliptic_curve::sec1::EncodedPoint<secp256r1::Secp256r1>;
 
 #[cfg(test)]
 pub mod tests;

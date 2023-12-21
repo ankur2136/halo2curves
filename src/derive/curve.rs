@@ -353,7 +353,7 @@ macro_rules! new_curve_impl {
             };
         }
 
-        #[derive(Copy, Clone, Debug)]
+        #[derive(Copy, Clone, Debug, PartialOrd, Ord)]
         $($privacy)* struct $name {
             pub x: $base,
             pub y: $base,
